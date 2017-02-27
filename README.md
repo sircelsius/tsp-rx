@@ -4,14 +4,10 @@
 
 Demonstrate how to solve the [TSP](https://simple.wikipedia.org/wiki/Travelling_salesman_problem) both with the [Nearest Neughbour algorithm](https://en.wikipedia.org/wiki/Nearest_neighbour_algorithm) (NN) and [Simulated Annealing heuristic](https://en.wikipedia.org/wiki/Simulated_annealing) (SA).
 
-## Basic Model
+## Implementing a simple NN implementation
 
-Good, you now have the basic project set up.
+I have added a simple unit test for the NN algorithm.
 
-I have created a few classes to model a simple Travelling Salesman Problem and its solutions, go ahead and check them out in [`src/main/java/com/sircelsius/rx/model`](src/main/java/com/sircelsius/rx/model).
+I have also created an implementation of our `TravellingSalesmanService` that doesn't do anything (it returns the input problem's vertices and a constant cost of 42).
 
-I also created an interface to solve our problem: [`src/main/java/com/sircelsius/rx/service/TravellingSalesmanService.java`](src/main/java/com/sircelsius/rx/service/TravellingSalesmanService.java).
-
-If you run the application with `./gradlew run`, you should see a simple problem printed out to your terminal.
-
-Play around with the model. Once you're done, move on to [`1.1.0`](https://github.com/sircelsius/tsp-rx/tree/1.1.0)
+*Task* Implement a correct implementation of the Nearest Neighbour Algorithm. It should pass the test defined in [`src/test/java/com/sircelsius/rx/service/NearestNeighbourAlgorithmTest.java`](src/test/java/com/sircelsius/rx/service/NearestNeighbourAlgorithmTest.java)
