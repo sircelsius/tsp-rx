@@ -1,0 +1,46 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+group = 'com.sircelsius.rx'
+version = '1.0-SNAPSHOT'
+
+description = """tsp-rx"""
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+tasks.withType(JavaCompile) {
+	options.encoding = 'UTF-8'
+}
+
+repositories {
+        
+     maven { url "http://repo.maven.apache.org/maven2" }
+}
+dependencies {
+    compile 'io.reactivex.rxjava2:rxjava:2.0.0'
+    compile 'org.apache.logging.log4j:log4j-api:2.7'
+    compile 'org.apache.logging.log4j:log4j-core:2.7'
+
+    compile 'org.projectlombok:lombok:1.12.6'
+
+    testCompile 'junit:junit:4.12'
+
+}
+
+apply plugin: "application"
+
+mainClassName = 'com.sircelsius.rx.App'
+
+startScripts.enabled = false
+
+task app(type: CreateStartScripts) {
+    mainClassName = 'com.sircelsius.rx.App'
+    applicationName = 'travelling-salesman'
+    outputDir = new File(project.buildDir, 'tmp')
+    classpath = jar.outputs.files + project.configurations.runtime
+}
+
+applicationDistribution.into('bin') {
+    from(app)
+    fileMode = 0755
+}
