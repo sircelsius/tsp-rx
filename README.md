@@ -19,3 +19,5 @@ Run the app skeleton
 ````
 ./gradlew run
 ````
+
+Once these steps are green, proceed to branch [`1.0.0`](https://github.com/sircelsius/tsp-rx/tree/1.0.0) and follow the steps there.
