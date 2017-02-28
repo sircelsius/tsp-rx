@@ -6,10 +6,8 @@ Demonstrate how to solve the [TSP](https://simple.wikipedia.org/wiki/Travelling_
 
 ## Implementing the SA heuristic
 
-I have added a working implementation of the Nearest Neighbour Algorithm. See [`src/main/java/com/sircelsius/rx/service/NearestNeighbourAlgorithm.java`](src/main/java/com/sircelsius/rx/service/NearestNeighbourAlgorithm.java) and compare to your implementation!
+I have added a working implementation of the Simulated Annealing Heuristic. See [`src/main/java/com/sircelsius/rx/service/SimulatedAnnealingHeuristic.java`](src/main/java/com/sircelsius/rx/service/SimulatedAnnealingHeuristic.java) and compare to your implementation!
 
-We are now going to work on the Simulated Annealing. We will implement a version where the initial solution will be provided by our Nearest Neighbour Algorithm.
+**Task** Check against your work, test with `./gradlew test`, and propose enhancements!
 
-**Task** Implement a version of SA. It should pass the test defined in [`src/test/java/com/sircelsius/rx/service/SimulatedAnnealingHeuristicTest.java`](src/test/java/com/sircelsius/rx/service/SimulatedAnnealingHeuristicTest.java)
-
-Once you have a working solution, check out [`1.3.0`](https://github.com/sircelsius/tsp-rx/tree/1.3.0) and follow the steps there.
+You've reached the end of the exercise, congrats!

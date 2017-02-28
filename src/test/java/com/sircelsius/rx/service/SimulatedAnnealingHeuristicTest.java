@@ -11,68 +11,73 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+
 public class SimulatedAnnealingHeuristicTest {
     @Test
-    public void simpleTest() throws Exception {
-        TravellingSalesmanProblem problem = getProblem();
-
-        TravellingSalesmanService initial = new NearestNeighbourAlgorithm();
-        TravellingSalesmanService service = new SimulatedAnnealingHeuristic(initial);
-
-        TravellingSalesmanSolution expected = getExpectedSolution();
-
-        Single<TravellingSalesmanSolution> single = service.solve(problem);
-        TestObserver<TravellingSalesmanSolution> subscriber = new TestObserver<>();
-
-        single.subscribe(subscriber);
-
-        subscriber.assertNoErrors();
-        subscriber.assertValueCount(1);
-        subscriber.assertValue(travellingSalesmanSolution ->
-                travellingSalesmanSolution.getCost() <= expected.getCost()
-        );
-    }
-
-    private TravellingSalesmanProblem getProblem() {
-        TravellingSalesmanProblem.TravellingSalesmanProblemBuilder builder =
-                TravellingSalesmanProblem.builder();
-
+    public void solve() throws Exception {
         List<Vertex> vertices = new ArrayList<>();
         List<Edge> edges = new ArrayList<>();
+        Vertex vertex;
+        Edge edge;
+        int size = 25;
 
-        for( int i = 0; i < 10; i++) {
-            vertices.add(Vertex.builder().id(i).build());
-            edges.add(Edge.builder()
-                    .departureVertexId(i)
-                    .arrivalVertexId(i+1)
-                    .value(i)
-                    .build()
-            );
+        for (int i = 1; i < size; i++) {
+            vertex = Vertex.builder()
+                    .id(i)
+                    .build();
+            vertices.add(vertex);
+
+            for (int j = 1; j < i; j++) {
+                edge = Edge.builder()
+                        .value( i - j )
+                        .departureVertexId(i)
+                        .arrivalVertexId( i - j )
+                        .build();
+                edges.add(edge);
+            }
+
+            for ( int k = i + 1; k < size; k++) {
+                edge = Edge.builder()
+                        .value( size + i - k )
+                        .departureVertexId(i)
+                        .arrivalVertexId( k )
+                        .build();
+                edges.add(edge);
+            }
         }
-        vertices.add(Vertex.builder().id(10).build());
 
-        return builder.edges(edges)
+        TravellingSalesmanProblem problem = TravellingSalesmanProblem
+                .builder()
+                .departureId(1)
+                .arrivalId(size - 1)
                 .vertices(vertices)
-                .departureId(0)
-                .arrivalId(10)
+                .edges(edges)
                 .build();
 
-    }
+        TravellingSalesmanService travellingSalesmanService = new NearestNeighbourAlgorithm();
+        TravellingSalesmanService service = new SimulatedAnnealingHeuristic(travellingSalesmanService);
+        Single<TravellingSalesmanSolution> solution = service.solve(problem);
+        TestObserver<TravellingSalesmanSolution> observer = new TestObserver<>();
+        solution.subscribe(observer);
 
-    private TravellingSalesmanSolution getExpectedSolution() {
-        TravellingSalesmanSolution.TravellingSalesmanSolutionBuilder builder =
-                TravellingSalesmanSolution.builder();
-        List<Vertex> vertices = new ArrayList<>();
-        Integer cost = 0;
+        observer.assertSubscribed();
+        observer.awaitTerminalEvent();
+        observer.assertValueCount(1);
+        observer.assertNoErrors();
 
-        for(int i = 0; i < 10; i++) {
-            vertices.add(Vertex.builder().id(i).build());
-            cost += i;
-        }
-        vertices.add(Vertex.builder().id(10).build());
+        observer.values()
+                .forEach(travellingSalesmanSolution -> {
+                    for (int l = 0; l < size - 2; l++) {
+                        if ( l % 2 == 0 ) {
+                            assertEquals((long) (l / 2 ) + 1, (long) travellingSalesmanSolution.getVertices().get(l).getId());
+                        } else {
+                            assertEquals( (long) size - 1 - ( l + 1 ) / 2,
+                                    (long) travellingSalesmanSolution.getVertices().get(l).getId());
+                        }
+                    }
+                    assertEquals((long) size - 1, (long) travellingSalesmanSolution.getVertices().get(size - 2).getId());
+                });
 
-        return builder.cost(cost)
-                .vertices(vertices)
-                .build();
     }
 }
