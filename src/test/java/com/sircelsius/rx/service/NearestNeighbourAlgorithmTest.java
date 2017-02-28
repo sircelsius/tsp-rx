@@ -60,10 +60,11 @@ public class NearestNeighbourAlgorithmTest {
         List<Vertex> vertices = new ArrayList<>();
         Integer cost = 0;
 
-        for(int i = 0; i <= 10; i++) {
+        for(int i = 0; i < 10; i++) {
             vertices.add(Vertex.builder().id(i).build());
             cost += i;
         }
+        vertices.add(Vertex.builder().id(10).build());
 
         return builder.cost(cost)
                 .vertices(vertices)
